@@ -53,6 +53,7 @@ typedef struct
 /* USER CODE BEGIN PD */
 #define LED_ON 		0
 #define LED_OFF 	1
+// #define DEBUG_SENSOR_DATA 1
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -114,6 +115,14 @@ void Sensor_Task(void *argument)
 
 		data.light    = LightSensor_ReadRaw();
 		data.distance = HCSR05_GetDis();
+
+#if DEBUG_SENSOR_DATA
+    printf("Temp: %dC, Humidity: %d%% \r\nLight: %d, Distance: %dcm\r\n",
+           data.temperature,
+           data.humidity,
+           data.light,
+           data.distance);
+#endif
 
 		xQueueOverwrite(sensorQueue, &data);
 		xQueueOverwrite(displayQueue, &data);
